@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Добавляем переход для плавного перемещения строк */
+        #score-table {
+            display: table-row-group;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="start-game" class="big-text">СУЧ</button>
+    <div id="container" style="display: none;">
+        <div id="score-section">
+            <h1>Таблица счёта</h1>
+            <table>
+                <thead></thead>
+                <tbody id="score-table">
+                    <tr data-team="Team 1" id="row">
+                        <td id="team" style="width: 100%;">Woman moment</td>
+                        <td class="score">0</td>
+                        <td class="buttons-container">
+                            <button class="decrement square-button">-</button>
+                            <button class="increment square-button">+</button>
+                        </td>
+                    </tr>
+                    <tr data-team="Team 2" id="row">
+                        <td id="team" style="width: 100%;">Сосал?</td>
+                        <td class="score">0</td>
+                        <td class="buttons-container">
+                            <button class="decrement square-button">-</button>
+                            <button class="increment square-button">+</button>
+                        </td>
+                    </tr>
+                    <tr data-team="Team 3" id="row">
+                        <td id="team" style="width: 100%;">Хост п_др</td>
+                        <td class="score">0</td>
+                        <td class="buttons-container">
+                            <button class="decrement square-button">-</button>
+                            <button class="increment square-button">+</button>
+                        </td>
+                    </tr>
+                    <!-- <tr data-team="Team 4" id="row">
+                        <td id="team" style="width: 100%;">Team 2</td>
+                        <td class="score">0</td>
+                        <td class="buttons-container">
+                            <button class="decrement square-button">-</button>
+                            <button class="increment square-button">+</button>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+
+            <br>
+        </div>
+        <div id="round-section">
+            <button id="round-button" class="big-text">Раунд 1</button>
+        </div>
+        <div id="question-section" style="display:none;">
+            <div id="round-number">Раунд X</div>
+            <div id="question-area">
+                <!-- <h2>Вопрос</h2> -->
+                <p id="question-text"></p>
+                <img id="question-image" src="" alt="" style="max-width: 400px;" />
+            </div>
+            <div id="next-round">
+                <button id="next-round-button">Следующий раунд</button>
+            </div>
+        </div>
+
+    </div>
+    <div id="volume">
+        <button id="pause-button" class="pause-button">&#9658;</button>
+        <!-- Элемент для управления громкостью -->
+        <div id="volume-control">
+            <!-- <label class="font" for="volume-range">11</label> -->
+            <input type="range" id="volume-range" min="0" max="1" step="0.01" value="0.1">
+        </div>
+    </div>
+    <script>
+        let currentRound = 1;
+        let mainAudio = new Audio('/static/audio/track.mp3');
+        let intro = new Audio('/static/audio/intro.mp3');
+        let nextround = new Audio('/static/audio/next_round.mp3');
+        // let curentAudio = mainAudio;
+
+        mainAudio.volume = 0.1;
+        intro.volume = 0.1;
+        nextround.volume = 0.1;
+
+        // Устанавливаем начальную громкость
+        // curentAudio.volume = 0.1;
+        $("#audio-player").prop("volume", 0.1);
+        // $("#volume-range").volume(0.1);
+        function loadRound(round) {
+            console.log("Round in load", currentRound)
+            $.getJSON(`/get_round_data/${round}`, function (data) {
+                $("#question-text").text(data.question_text);
+                $("#question-area").show();
+                console.log(data.question_text)
+                $("#question-image").attr("src", data.image_path);
+                $("#round-button").hide();
+                $("#round-number").show();
+                $("#round-number").text(`Раунд ${round}`);
+                $("#question-section").show();
+                $("#next-round").show();
+            });
+        }
+
+        function unloadRound(round) {
+            $("#round-button").show();
+            $("#round-number").hide();
+            $("#round-button").text(`Раунд ${round}`);
+            $("#question-section").hide();
+            $("#next-round").hide();
+        }
+
+        $(document).ready(function () {
+            $("#start-game").click(function () {
+                $("#start-game").hide();
+                $("#container").show();
+                $("#question-seection").hide();
+                intro.play();
+            });
+
+            $("#round-button").click(function () {
+                loadRound(currentRound);
+                console.log(currentRound)
+            });
+
+            $("#next-round-button").click(function () {
+                currentRound++;
+                unloadRound(currentRound);
+                $("#question-area").hide();
+                nextround.play();
+            });
+
+            $("#play-audio").click(function () {
+                document.getElementById("audio-player").play();
+            });
+
+            $("#pause-button").click(function () {
+                if (!mainAudio.paused) {
+                    mainAudio.pause();
+                    $("#pause-button").html("&#9658;");
+                    mainAudio.currentTime = 0;
+                }
+                else {
+                    mainAudio.play();
+                    $("#pause-button").html('&#10074;&#10074;');
+                }
+            });
+
+            // $("#pause-main-audio").click(function () {
+            //     if (!mainAudio.paused) {
+            //         mainAudio.pause();
+            //     }
+            //     else {
+            //         mainAudio.play();
+            //     }
+            // });
+
+            $("#volume-range").on("input", function () {
+                let volume = parseFloat($(this).val());
+                mainAudio.volume = volume;  // Устанавливаем громкость основного аудио
+                intro.volume = volume;
+                nextround.volume = volume;
+                audioPlayer.volume = volume;  // Устанавливаем громкость для аудиоплеера вопроса
+                console.log("Текущая громкость:", volume); // Лог для проверки текущего уровня громкости
+            });
+
+            $(".decrement, .increment").click(function () {
+                let row = $(this).closest("tr");
+                let teamName = row.data("team");
+                let change = $(this).hasClass("increment") ? 1 : -1;
+
+                $.ajax({
+                    url: "/update_score",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ team_name: teamName, change: change }),
+                    success: function (response) {
+                        row.find(".score").text(response.new_score);
+                        clearTimeout(window.sortTimeout);
+                        window.sortTimeout = setTimeout(() => {
+                            sortTable(); // Запускаем сортировку через 3 секунды
+                        }, 3000);
+                    }
+                });
+            });
+        });
+
+        function sortTable() {
+            let tbody = $('#score-table');
+            let rows = tbody.find('tr').get();
+
+            // Сортируем строки по убыванию значения score
+            rows.sort(function (a, b) {
+                let scoreA = parseInt($(a).find(".score").text());
+                let scoreB = parseInt($(b).find(".score").text());
+                return scoreB - scoreA; // Сортировка по убыванию
+            });
+
+            // Применяем анимацию перемещения
+            // rows.forEach((row, index) => {
+            //     $(row).css('transform', `translateY(${index * 100}%)`);
+            // });
+
+            $.each(rows, function (index, row) {
+                $(row).css("transform", `translateY(${index * 20}px)`); // Добавляем смещение перед вставкой
+            });
+
+            setTimeout(() => {
+                rows.forEach((row) => {
+                    $(row).css('transform', ''); // Убираем анимацию
+                    tbody.append(row);   // Перемещаем строку в DOM
+                });
+            }, 500); // Ждем завершения анимации
+        }
+    </script>
+</body>
+
+</html>

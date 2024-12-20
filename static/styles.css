@@ -1,0 +1,270 @@
+/* Цветовые макросы */
+:root {
+    --font-color: #9FA4C4;
+    /* Основной цвет текста */
+    --background-color: #262626;
+    /* Цвет фона */
+    --cream: #F8E8C4;
+    /* Цвет рамки и текста */
+    --blue: #5EB1BF;
+    /* Цвет при наведении */
+    --lavanda: #9FA4C4;
+    --brown: #262626;
+    --yellow: #EED050;
+    --orange: #F2AC4C;
+    --lightblue: #4BD1C7;
+}
+
+body {
+    margin: 0;
+    padding: 10px;
+    background-color: var(--background-color);
+    color: var(--cream);
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+button {
+    padding: 10px;
+    margin: 15px 0;
+    font-size: 1.5rem;
+    background-color: var(--background-color);
+    color: var(--cream);
+    border: 2px solid var(--cream);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
+}
+
+button:hover {
+    color: var(--blue);
+    border-color: var(--blue);
+}
+
+button:active {
+    box-shadow: 3px -3px var(--blue);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+button.big-text {
+    font-size: 15rem;
+    border: none;
+    transition: text-shadow 0.3s;
+    text-shadow: 4px -4px var(--blue);
+}
+
+button.big-text:hover {
+    text-shadow: 12px -12px var(--blue);
+    background-color: var(--brown);
+    color: var(--cream);
+}
+
+button.big-text:active {
+    color: var(--cream);
+    box-shadow: none;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Выровнять кнопки по правому краю */
+    gap: 15px;
+    /* Отступ между кнопками */
+    padding-right: 10px;
+    padding-left: 30px;
+}
+
+.font {
+    font-size: 1.5rem;
+    color: var(--cream);
+}
+
+h1 {
+    font-size: 3rem;
+    transition: text-shadow 0.3s;
+    text-align: center;
+}
+
+h1:hover {
+    text-shadow: 3px -3px var(--blue);
+}
+
+/* Ползунок громкости */
+#volume {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 2rem;
+}
+
+#volume-control {
+    display: flex;
+    align-items: center;
+}
+
+#volume-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 8px;
+    background: var(--cream);
+    outline: none;
+    border-radius: 5px;
+    transition: background 0.2s;
+    border: 2px solid var(--cream);
+    background-color: var(--background-color);
+}
+
+#volume-range::-webkit-slider-thumb,
+#volume-range::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--background-color);
+    border: 2px solid var(--cream);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+#volume-range::-webkit-slider-thumb:hover,
+#volume-range::-moz-range-thumb:hover {
+    background-color: var(--cream);
+}
+
+/* Таблица счёта */
+#container {
+    display: flex;
+    width: 100%;
+    height: 95%;
+    flex-direction: row;
+}
+
+#score-section {
+    justify-content: center;
+    padding: 20px;
+    border-right: 4px solid var(--cream);
+    width: 28%;
+}
+
+table {
+    width: 100%;
+    /* display: flex;
+    flex-direction: row; */
+    text-align: center;
+    font-size: 1.5rem;
+    border: 4px solid var(--cream);
+    border-radius: 8px;
+    transition: box-shadow 0.3s;
+    /* border-collapse: coll; */
+}
+
+table:hover {
+    box-shadow: 5px -5px var(--cream);
+}
+
+#team {
+    text-align: left;
+    /* Выровнять текст команды по левому краю */
+    padding-left: 10px;
+    /* Добавляем отступ слева */
+    word-wrap: break-word;
+    /* Разрешить перенос слов на новую строку */
+    white-space: normal;
+    /* Разрешить перенос текста на новую строку */
+    overflow-wrap: break-word;
+    /* Переносить текст на новую строку, если он выходит за пределы */
+    max-width: 8rem;
+    /* background-color: #4BD1C7; */
+}
+
+#row {
+    border-bottom: 1px solid var(--cream);
+}
+
+#score-table tr {
+    transition: transform 0.3s linear;
+}
+
+th,
+td {
+    padding: 10px;
+}
+
+#row {
+    border: 1px solid var(--cream);
+    border-radius: 8px;
+}
+
+.square-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+    border-color: var(--cream);
+    /* border: none; */
+    padding: 0;
+}
+
+.square-button:hover {
+    color: var(--blue);
+    border-color: var(--blue);
+}
+
+.pause-button {
+    border: none;
+    transition: color 0.3s;
+}
+
+.pause-button:hover {
+    color: var(--blue);
+}
+
+#round-section {
+    display: flex;
+    padding: 5rem;
+    margin: 5% 0;
+    margin-left: 1rem;
+}
+
+#question-section {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    margin: 5% 0;
+}
+
+#question-text {
+    font-size: 2.5rem;
+    text-align: left;
+}
+
+#round-number {
+    font-size: 4rem;
+    margin-bottom: 7rem;
+    text-align: center;
+    transition: text-shadow 0.3s;
+}
+
+#round-number:hover {
+    text-shadow: 4px -4px var(--blue);
+}
+#next-round {
+    display: flex;
+    justify-content: center; /* Центровка по горизонтали */
+    align-items: flex-start; /* Прижать к верху по вертикали */
+    height: 100%;            /* Установить высоту, чтобы элемент занимал весь доступный контейнер */
+}
+
+#next-round-button {
+    font-size: 2.4rem;
+    /* margin-top: rem; */
+}
